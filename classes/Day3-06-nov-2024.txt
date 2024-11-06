@@ -3,6 +3,29 @@ Agenda:
 dart programming language
 
 flutter create <projectname>
+2. CURD - Todos,Employee Master
+
+
+3. Interface API's
+
+jsonplaceholder.typicode.com
+
+To display todos
+https://jsonplaceholder.typicode.com/todos
+
+To display a todo using the id
+https://jsonplaceholder.typicode.com/todos/1
+
+http
+
+mobile app development
+
+backend - api - python flask,django, node,java spring boot
+
+
+
+
+
 
 
 
