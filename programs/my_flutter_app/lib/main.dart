@@ -10,69 +10,126 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Employee CRUD',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: TodoListPage(),
+      home: EmployeeListPage(),
     );
   }
 }
 
-class Todo {
-  String title;
-  bool isDone;
+class Employee {
+  String code;
+  String name;
+  String department;
+  String designation;
+  double salary;
 
-  Todo({
-    required this.title,
-    this.isDone = false,
+  Employee({
+    required this.code,
+    required this.name,
+    required this.department,
+    required this.designation,
+    required this.salary,
   });
 }
 
-class TodoListPage extends StatefulWidget {
+class EmployeeListPage extends StatefulWidget {
   @override
-  _TodoListPageState createState() => _TodoListPageState();
+  _EmployeeListPageState createState() => _EmployeeListPageState();
 }
 
-class _TodoListPageState extends State<TodoListPage> {
-  final List<Todo> _todos = [];
-  final TextEditingController _controller = TextEditingController();
+class _EmployeeListPageState extends State<EmployeeListPage> {
+  final List<Employee> _employees = [];
+  final TextEditingController _codeController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _departmentController = TextEditingController();
+  final TextEditingController _designationController = TextEditingController();
+  final TextEditingController _salaryController = TextEditingController();
 
-  void _addTodo() {
-    if (_controller.text.isNotEmpty) {
+  void _addEmployee() {
+    if (_codeController.text.isNotEmpty &&
+        _nameController.text.isNotEmpty &&
+        _departmentController.text.isNotEmpty &&
+        _designationController.text.isNotEmpty &&
+        _salaryController.text.isNotEmpty) {
       setState(() {
-        _todos.add(Todo(
-          title: _controller.text,
+        _employees.add(Employee(
+          code: _codeController.text,
+          name: _nameController.text,
+          department: _departmentController.text,
+          designation: _designationController.text,
+          salary: double.tryParse(_salaryController.text) ?? 0.0,
         ));
-        _controller.clear();
+        _clearControllers();
       });
     }
   }
 
-  void _toggleTodoStatus(int index) {
+  void _editEmployee(int index) {
     setState(() {
-      _todos[index].isDone = !_todos[index].isDone;
+      _employees[index] = Employee(
+        code: _codeController.text,
+        name: _nameController.text,
+        department: _departmentController.text,
+        designation: _designationController.text,
+        salary: double.tryParse(_salaryController.text) ?? 0.0,
+      );
+      _clearControllers();
     });
   }
 
-  void _deleteTodo(int index) {
+  void _deleteEmployee(int index) {
     setState(() {
-      _todos.removeAt(index);
+      _employees.removeAt(index);
     });
   }
 
-  void _editTodoDialog(int index) {
-    _controller.text = _todos[index].title;
+  void _clearControllers() {
+    _codeController.clear();
+    _nameController.clear();
+    _departmentController.clear();
+    _designationController.clear();
+    _salaryController.clear();
+  }
+
+  void _showEditDialog(int index) {
+    _codeController.text = _employees[index].code;
+    _nameController.text = _employees[index].name;
+    _departmentController.text = _employees[index].department;
+    _designationController.text = _employees[index].designation;
+    _salaryController.text = _employees[index].salary.toString();
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Edit Todo'),
-          content: TextField(
-            controller: _controller,
-            decoration: const InputDecoration(
-              labelText: 'Todo',
-            ),
+          title: const Text('Edit Employee'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                controller: _codeController,
+                decoration: const InputDecoration(labelText: 'Code'),
+              ),
+              TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(labelText: 'Name'),
+              ),
+              TextField(
+                controller: _departmentController,
+                decoration: const InputDecoration(labelText: 'Department'),
+              ),
+              TextField(
+                controller: _designationController,
+                decoration: const InputDecoration(labelText: 'Designation'),
+              ),
+              TextField(
+                controller: _salaryController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(labelText: 'Salary'),
+              ),
+            ],
           ),
           actions: <Widget>[
             TextButton(
@@ -83,7 +140,7 @@ class _TodoListPageState extends State<TodoListPage> {
             ),
             TextButton(
               onPressed: () {
-                _editTodo(index);
+                _editEmployee(index);
                 Navigator.of(context).pop();
               },
               child: const Text('Save'),
@@ -94,74 +151,84 @@ class _TodoListPageState extends State<TodoListPage> {
     );
   }
 
-  void _editTodo(int index) {
-    setState(() {
-      _todos[index].title = _controller.text;
-      _controller.clear();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Todo List'),
+        title: const Text('Employee CRUD'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
             TextField(
-              controller: _controller,
-              decoration: const InputDecoration(
-                labelText: 'Enter a new todo',
-              ),
+              controller: _codeController,
+              decoration: const InputDecoration(labelText: 'Code'),
+            ),
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(labelText: 'Name'),
+            ),
+            TextField(
+              controller: _departmentController,
+              decoration: const InputDecoration(labelText: 'Department'),
+            ),
+            TextField(
+              controller: _designationController,
+              decoration: const InputDecoration(labelText: 'Designation'),
+            ),
+            TextField(
+              controller: _salaryController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Salary'),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              onPressed: _addTodo,
-              child: const Text('Add Todo'),
+              onPressed: _addEmployee,
+              child: const Text('Add Employee'),
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: ListView.builder(
-                itemCount: _todos.length,
-                itemBuilder: (context, index) {
-                  final todo = _todos[index];
-                  return ListTile(
-                    title: Text(
-                      todo.title,
-                      style: TextStyle(
-                        decoration: todo.isDone
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none,
-                      ),
-                    ),
-                    leading: Checkbox(
-                      value: todo.isDone,
-                      onChanged: (value) {
-                        _toggleTodoStatus(index);
-                      },
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            _editTodoDialog(index);
-                          },
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            _deleteTodo(index);
-                          },
-                        ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  columns: const <DataColumn>[
+                    DataColumn(label: Text('Code')),
+                    DataColumn(label: Text('Name')),
+                    DataColumn(label: Text('Department')),
+                    DataColumn(label: Text('Designation')),
+                    DataColumn(label: Text('Salary')),
+                    DataColumn(label: Text('Actions')),
+                  ],
+                  rows: _employees.map((employee) {
+                    int index = _employees.indexOf(employee);
+                    return DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text(employee.code)),
+                        DataCell(Text(employee.name)),
+                        DataCell(Text(employee.department)),
+                        DataCell(Text(employee.designation)),
+                        DataCell(Text(employee.salary.toString())),
+                        DataCell(Row(
+                          children: <Widget>[
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () {
+                                _showEditDialog(index);
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                _deleteEmployee(index);
+                              },
+                            ),
+                          ],
+                        )),
                       ],
-                    ),
-                  );
-                },
+                    );
+                  }).toList(),
+                ),
               ),
             ),
           ],
