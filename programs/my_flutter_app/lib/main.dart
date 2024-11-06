@@ -10,22 +10,54 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyHomePage(),
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: TodoListPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
+class Todo {
+  String title;
+  bool isDone;
+
+  Todo({
+    required this.title,
+    this.isDone = false,
+  });
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  Color _backgroundColor = Colors.white;
+class TodoListPage extends StatefulWidget {
+  @override
+  _TodoListPageState createState() => _TodoListPageState();
+}
 
-  void _changeColor(Color color) {
+class _TodoListPageState extends State<TodoListPage> {
+  final List<Todo> _todos = [];
+  final TextEditingController _controller = TextEditingController();
+
+  void _addTodo() {
+    if (_controller.text.isNotEmpty) {
+      setState(() {
+        _todos.add(Todo(
+          title: _controller.text,
+        ));
+        _controller.clear();
+      });
+    }
+  }
+
+  void _toggleTodoStatus(int index) {
     setState(() {
-      _backgroundColor = color;
+      _todos[index].isDone = !_todos[index].isDone;
+    });
+  }
+
+  void _deleteTodo(int index) {
+    setState(() {
+      _todos.removeAt(index);
     });
   }
 
@@ -33,33 +65,55 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Change Background Color'),
+        title: const Text('Todo List'),
       ),
-      body: Container(
-        color: _backgroundColor,
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: () => _changeColor(Colors.red),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: const Text('Red'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            TextField(
+              controller: _controller,
+              decoration: const InputDecoration(
+                labelText: 'Enter a new todo',
               ),
-              const SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: () => _changeColor(Colors.green),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                child: const Text('Green'),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _addTodo,
+              child: const Text('Add Todo'),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _todos.length,
+                itemBuilder: (context, index) {
+                  final todo = _todos[index];
+                  return ListTile(
+                    title: Text(
+                      todo.title,
+                      style: TextStyle(
+                        decoration: todo.isDone
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                      ),
+                    ),
+                    leading: Checkbox(
+                      value: todo.isDone,
+                      onChanged: (value) {
+                        _toggleTodoStatus(index);
+                      },
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        _deleteTodo(index);
+                      },
+                    ),
+                  );
+                },
               ),
-              const SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: () => _changeColor(Colors.blue),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                child: const Text('Blue'),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
