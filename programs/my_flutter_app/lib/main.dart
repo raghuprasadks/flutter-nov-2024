@@ -61,6 +61,46 @@ class _TodoListPageState extends State<TodoListPage> {
     });
   }
 
+  void _editTodoDialog(int index) {
+    _controller.text = _todos[index].title;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Edit Todo'),
+          content: TextField(
+            controller: _controller,
+            decoration: const InputDecoration(
+              labelText: 'Todo',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                _editTodo(index);
+                Navigator.of(context).pop();
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _editTodo(int index) {
+    setState(() {
+      _todos[index].title = _controller.text;
+      _controller.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,11 +143,22 @@ class _TodoListPageState extends State<TodoListPage> {
                         _toggleTodoStatus(index);
                       },
                     ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        _deleteTodo(index);
-                      },
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () {
+                            _editTodoDialog(index);
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            _deleteTodo(index);
+                          },
+                        ),
+                      ],
                     ),
                   );
                 },
