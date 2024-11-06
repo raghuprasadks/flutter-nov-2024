@@ -1,0 +1,11 @@
+Agenda:
+1. Recap - flutter - sdk
+dart programming language
+
+flutter create <projectname>
+
+
+
+
+
+

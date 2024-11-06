@@ -1,0 +1,31 @@
+# Dart and Flutter
+*.dart.js
+*.dart.js.map
+*.info.json
+*.js
+*.js.map
+.packages
+.pub/
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache
+.pubspec.lock
+.idea/
+.vscode/
+*.iml
+
+# Programs folder
+programs/**/.dart_tool/
+programs/**/.flutter-plugins
+programs/**/.flutter-plugins-dependencies
+programs/**/.packages
+programs/**/.pub/
+programs/**/build/
+programs/**/.pub-cache
+programs/**/.pubspec.lock
+programs/**/.idea/
+programs/**/.vscode/
+programs/**/*.iml
