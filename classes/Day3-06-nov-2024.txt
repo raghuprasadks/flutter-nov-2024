@@ -29,6 +29,8 @@ https://openweathermap.org/
 
 https://api.openweathermap.org/data/2.5/weather?q=bangalore&units=metric&appid=384db1ce93218e20fd384d3016372238
 
+https://dev.to/hackmamba/create-a-simple-stock-price-tracker-in-flutter-n0h
+
 
 
 

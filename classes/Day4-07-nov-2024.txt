@@ -1,0 +1,7 @@
+Agenda:
+
+1. Front end flutter
+flutter pub get
+2. Backend node,express,mongo db
+kaushalya.tech
+https://ekaushalya.kaushalya.tech/
