@@ -1,0 +1,20 @@
+Agenda:
+
+End to end application development
+1. Flutter as front end
+2. Node,express and mongodb as the backend
+
+Download flutter
+Dart - programming language
+flutter sdk - 
+
+steps:
+1. create endtoend folder
+2. create api folder inside endtoend
+3. cd api
+4. open in visual studio code
+5. open terminal
+6. npm init
+7. npm i express body-parser cors mongodb
+
+
